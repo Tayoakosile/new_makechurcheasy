@@ -14,13 +14,37 @@ import {
   Lightbulb,
   Map,
   HelpCircle,
-  Users
+  Users,
+  QrCode
 } from "lucide-react";
 
 export default function Overview() {
   return (
-    <div className="p-4 md:p-8 max-w-7xl mx-auto w-full space-y-6">
+    <div className="p-4 md:p-8 max-w-7xl mx-auto w-full space-y-6 pb-16">
       
+      {/* Generate Pairing Code Banner */}
+      <div className="w-full bg-slate-900 text-white rounded-xl shadow-lg p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden relative">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 translate-y-1/2 -translate-x-1/2 pointer-events-none"></div>
+        
+        <div className="flex-1 relative z-10 text-center md:text-left">
+          <div className="flex items-center gap-2 justify-center md:justify-start mb-2">
+            <Link className="w-5 h-5 text-blue-400" />
+            <h2 className="text-xl font-bold tracking-tight">Connect a New Device</h2>
+          </div>
+          <p className="text-slate-400 text-sm max-w-lg mx-auto md:mx-0">
+            Generate a secure pairing code to quickly link a new presentation computer, display screen, or mobile companion app to your account.
+          </p>
+        </div>
+        
+        <div className="relative z-10 w-full md:w-auto">
+          <button className="w-full md:w-auto bg-blue-600 hover:bg-blue-500 text-white px-8 py-3.5 rounded-lg font-bold transition-all shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_25px_rgba(37,99,235,0.5)] flex items-center justify-center gap-2">
+            <QrCode className="w-5 h-5" />
+            Generate Pairing Code
+          </button>
+        </div>
+      </div>
+
       {/* Hero Banner */}
       <div className="w-full bg-white border border-slate-200 rounded-xl overflow-hidden relative shadow-sm flex flex-col md:flex-row min-h-[220px]">
         <div className="absolute inset-0 z-0">
