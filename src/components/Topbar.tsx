@@ -5,6 +5,10 @@ export function Topbar() {
   const location = useLocation();
   
   const getPageTitle = () => {
+    if (location.pathname.startsWith('/settings/email')) {
+      return "Security Settings";
+    }
+    
     switch (location.pathname) {
       case "/": return "Overview";
       case "/settings": return "Profile Settings";

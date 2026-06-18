@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import Overview from "./pages/Overview";
 import ProfileSettings from "./pages/ProfileSettings";
+import ChangeEmail from "./pages/ChangeEmail";
+import EmailVerified from "./pages/EmailVerified";
 import Devices from "./pages/Devices";
 import ChurchProfile from "./pages/ChurchProfile";
 import Security from "./pages/Security";
@@ -15,6 +17,8 @@ export default function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Overview />} />
           <Route path="settings" element={<ProfileSettings />} />
+          <Route path="settings/email" element={<ChangeEmail />} />
+          <Route path="settings/email/verified" element={<EmailVerified />} />
           <Route path="devices" element={<Devices />} />
           <Route path="church-profile" element={<ChurchProfile />} />
           <Route path="security" element={<Security />} />

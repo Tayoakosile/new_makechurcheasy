@@ -10,6 +10,7 @@ import {
   Chrome, 
   LayoutGrid 
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function ProfileSettings() {
   return (
@@ -66,9 +67,12 @@ export default function ProfileSettings() {
                       <CheckCircle2 className="w-3.5 h-3.5 shrink-0" /> <span className="hidden sm:inline">Verified</span>
                     </div>
                   </div>
-                  <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-3 border border-blue-600 text-blue-600 rounded-lg text-sm font-bold hover:bg-blue-50 transition-colors bg-white whitespace-nowrap shadow-sm">
+                  <Link 
+                    to="/settings/email"
+                    className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-3 border border-blue-600 text-blue-600 rounded-lg text-sm font-bold hover:bg-blue-50 transition-colors bg-white whitespace-nowrap shadow-sm"
+                  >
                     <Mail className="w-4 h-4" /> Change Email Address
-                  </button>
+                  </Link>
                 </div>
               </div>
 
