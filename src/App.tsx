@@ -4,6 +4,10 @@ import Overview from "./pages/Overview";
 import ProfileSettings from "./pages/ProfileSettings";
 import ChangeEmail from "./pages/ChangeEmail";
 import EmailVerified from "./pages/EmailVerified";
+import SessionManager from "./pages/SessionManager";
+import DeactivateAccount from "./pages/DeactivateAccount";
+import ChangePassword from "./pages/ChangePassword";
+import ErrorView from "./pages/ErrorView";
 import Devices from "./pages/Devices";
 import ChurchProfile from "./pages/ChurchProfile";
 import Security from "./pages/Security";
@@ -19,6 +23,10 @@ export default function App() {
           <Route path="settings" element={<ProfileSettings />} />
           <Route path="settings/email" element={<ChangeEmail />} />
           <Route path="settings/email/verified" element={<EmailVerified />} />
+          <Route path="settings/deactivate" element={<DeactivateAccount />} />
+          <Route path="security/sessions" element={<SessionManager />} />
+          <Route path="security/password" element={<ChangePassword />} />
+          <Route path="error/:type" element={<ErrorView />} />
           <Route path="devices" element={<Devices />} />
           <Route path="church-profile" element={<ChurchProfile />} />
           <Route path="security" element={<Security />} />

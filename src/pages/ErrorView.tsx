@@ -1,0 +1,46 @@
+import { Link2Off, Clock, MailX, AlertTriangle } from "lucide-react";
+import ErrorScreen from "../components/ErrorScreen";
+import { useParams } from "react-router-dom";
+
+export default function ErrorView() {
+  const { type } = useParams();
+
+  if (type === "invalid-link") {
+    return (
+      <ErrorScreen 
+        title="Invalid Link"
+        description="The link you followed is invalid or malformed. Please request a new link from your account settings or contact support if you need assistance."
+        icon={<Link2Off className="w-12 h-12 text-red-500" />}
+      />
+    );
+  }
+
+  if (type === "expired") {
+    return (
+      <ErrorScreen 
+        title="Link Expired"
+        description="For your security, verification links expire after 24 hours. This link is no longer active. Please request a new link to continue."
+        icon={<Clock className="w-12 h-12 text-orange-500" />}
+      />
+    );
+  }
+
+  if (type === "invalid-email") {
+    return (
+      <ErrorScreen 
+        title="Invalid Email Address"
+        description="We couldn't verify this email address. It may have been entered incorrectly or no longer exists. Please try again with a valid email."
+        icon={<MailX className="w-12 h-12 text-red-500" />}
+      />
+    );
+  }
+
+  return (
+    <ErrorScreen 
+      title="An Error Occurred"
+      description="Something went wrong while processing your request. Please try again later."
+      code="500"
+      icon={<AlertTriangle className="w-12 h-12 text-red-500" />}
+    />
+  );
+}

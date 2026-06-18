@@ -1,4 +1,5 @@
 import { Shield, Lock, Smartphone, Monitor as Desktop, Mail, ShieldCheck, MoreVertical, CheckCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Security() {
   return (
@@ -48,9 +49,9 @@ export default function Security() {
           <h2 className="text-base font-bold text-slate-900">Password</h2>
           <p className="text-sm text-slate-500 mt-1">Last changed 30 days ago</p>
         </div>
-        <button className="flex items-center gap-2 px-5 py-2 border border-slate-200 bg-white text-slate-700 rounded-lg text-sm font-semibold hover:bg-slate-50 transition-colors shadow-sm whitespace-nowrap">
+        <Link to="/security/password" className="flex items-center gap-2 px-5 py-2 border border-slate-200 bg-white text-slate-700 rounded-lg text-sm font-semibold hover:bg-slate-50 transition-colors shadow-sm whitespace-nowrap">
           <Lock className="w-4 h-4" /> Change Password
-        </button>
+        </Link>
       </div>
 
       <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm flex flex-col gap-6">
@@ -92,9 +93,12 @@ export default function Security() {
             <h2 className="text-lg font-bold text-slate-900">Active Sessions</h2>
             <p className="text-sm text-slate-500 mt-1">These are devices currently signed in to your account.</p>
           </div>
-          <button className="px-4 py-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg text-sm font-semibold transition-colors whitespace-nowrap border border-red-100">
-            Sign Out All
-          </button>
+          <Link 
+            to="/security/sessions"
+            className="px-4 py-2 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg text-sm font-bold transition-colors whitespace-nowrap border border-blue-100"
+          >
+            Manage Sessions
+          </Link>
         </div>
 
         <div className="flex flex-col divide-y divide-slate-100">

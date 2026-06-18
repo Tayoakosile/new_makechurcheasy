@@ -137,9 +137,9 @@ export default function ProfileSettings() {
               <h3 className="text-base font-bold text-red-600">Deactivate Account</h3>
               <p className="text-sm text-red-800/80 mt-1">Temporarily or permanently deactivate your account and all associated data.</p>
             </div>
-            <button className="w-full md:w-auto px-5 py-2.5 border border-red-500 text-red-600 rounded-lg text-sm font-bold hover:bg-red-50 transition-colors bg-white whitespace-nowrap shadow-sm">
+            <Link to="/settings/deactivate" className="w-full md:w-auto px-5 py-2.5 border border-red-500 text-red-600 rounded-lg text-sm font-bold hover:bg-red-50 transition-colors bg-white whitespace-nowrap shadow-sm text-center">
               Deactivate Account
-            </button>
+            </Link>
           </section>
 
         </div>
