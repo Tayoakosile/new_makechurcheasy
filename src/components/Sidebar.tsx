@@ -1,19 +1,5 @@
 import { NavLink } from "react-router-dom";
-import {
-  LayoutDashboard,
-  CreditCard,
-  Zap,
-  Download,
-  Monitor,
-  Landmark,
-  BookOpen,
-  Users,
-  HelpCircle,
-  ShieldCheck,
-  Receipt,
-  Settings,
-  Headset,
-} from "lucide-react";
+import { X, LayoutDashboard, CreditCard, Zap, Download, Monitor, Landmark, BookOpen, Users, HelpCircle, ShieldCheck, Receipt, Settings, Headset } from "lucide-react";
 import { cn } from "../lib/utils";
 
 const mainNavItems = [
@@ -31,18 +17,36 @@ const mainNavItems = [
   { path: "/settings", label: "Settings", icon: Settings },
 ];
 
-export function Sidebar() {
+export function Sidebar({ isOpen, setIsOpen }: { isOpen?: boolean, setIsOpen?: (v: boolean) => void }) {
   return (
-    <aside className="fixed left-0 top-0 h-full w-64 bg-white border-r border-slate-200 flex flex-col z-50 hidden md:flex">
-      <div className="flex items-center gap-3 px-6 py-5 mb-2">
-        <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">
-          E
+    <>
+      {/* Mobile Overlay */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 md:hidden"
+          onClick={() => setIsOpen?.(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside className={cn(
+        "fixed left-0 top-0 h-full w-64 bg-white border-r border-slate-200 flex flex-col z-50 transition-transform duration-300 md:translate-x-0",
+        isOpen ? "translate-x-0" : "-translate-x-full"
+      )}>
+        <div className="flex items-center justify-between gap-3 px-6 py-5 mb-2">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">
+              E
+            </div>
+            <div className="flex flex-col">
+              <span className="font-bold text-slate-900 leading-tight">EasyBible</span>
+              <span className="text-xs font-semibold text-slate-500">Mount</span>
+            </div>
+          </div>
+          <button className="md:hidden p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors" onClick={() => setIsOpen?.(false)}>
+            <X className="w-5 h-5" />
+          </button>
         </div>
-        <div className="flex flex-col">
-          <span className="font-bold text-slate-900 leading-tight">EasyBible</span>
-          <span className="text-xs font-semibold text-slate-500">Mount</span>
-        </div>
-      </div>
 
       <nav className="flex-1 px-4 py-2 space-y-1 overflow-y-auto">
         {mainNavItems.map((item) => {
@@ -51,6 +55,7 @@ export function Sidebar() {
             <NavLink
               key={item.path}
               to={item.path}
+              onClick={() => setIsOpen?.(false)}
               className={({ isActive }) =>
                 cn(
                   "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
@@ -91,5 +96,6 @@ export function Sidebar() {
         </a>
       </div>
     </aside>
+    </>
   );
 }

@@ -6,8 +6,7 @@ export default function ChangeEmail() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate email verification sent and verified
-    navigate("/settings/email/verified");
+    navigate("/error/email-sent");
   };
 
   return (

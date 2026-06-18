@@ -12,6 +12,7 @@ import Devices from "./pages/Devices";
 import ChurchProfile from "./pages/ChurchProfile";
 import Security from "./pages/Security";
 import Credits from "./pages/Credits";
+import CreditsHistory from "./pages/CreditsHistory";
 import Downloads from "./pages/Downloads";
 
 export default function App() {
@@ -31,6 +32,7 @@ export default function App() {
           <Route path="church-profile" element={<ChurchProfile />} />
           <Route path="security" element={<Security />} />
           <Route path="credits" element={<Credits />} />
+          <Route path="credits/history" element={<CreditsHistory />} />
           <Route path="downloads" element={<Downloads />} />
           
           {/* Fallback routes for dummy links */}

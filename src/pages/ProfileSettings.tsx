@@ -178,10 +178,6 @@ export default function ProfileSettings() {
                 </div>
               </div>
             </div>
-            
-            <button className="w-full py-2.5 border border-slate-200 text-blue-600 rounded-lg text-sm font-bold hover:bg-slate-50 transition-colors flex items-center justify-center gap-2 shadow-sm">
-              <ArrowRightLeft className="w-4 h-4" /> Request Church Change
-            </button>
           </section>
 
           {/* Login Methods */}

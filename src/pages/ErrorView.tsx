@@ -1,9 +1,21 @@
-import { Link2Off, Clock, MailX, AlertTriangle } from "lucide-react";
+import { Link2Off, Clock, MailX, AlertTriangle, MailCheck } from "lucide-react";
 import ErrorScreen from "../components/ErrorScreen";
 import { useParams } from "react-router-dom";
 
 export default function ErrorView() {
   const { type } = useParams();
+
+  if (type === "email-sent") {
+    return (
+      <ErrorScreen 
+        title="Check Your Email"
+        description="We've sent a verification link to your new email address. Please click the link to verify your email."
+        icon={<MailCheck className="w-12 h-12 text-blue-500" />}
+        primaryActionText="Back to Security"
+        primaryActionLink="/security"
+      />
+    );
+  }
 
   if (type === "invalid-link") {
     return (

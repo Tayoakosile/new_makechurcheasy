@@ -1,7 +1,10 @@
-import { Shield, Lock, Smartphone, Monitor as Desktop, Mail, ShieldCheck, MoreVertical, CheckCircle } from "lucide-react";
+import { useState } from "react";
+import { Shield, Lock, Smartphone, Monitor as Desktop, Mail, ShieldCheck, MoreVertical, CheckCircle, Edit2, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function Security() {
+  const [openDropdown, setOpenDropdown] = useState<number | null>(null);
+
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto w-full flex flex-col gap-6">
       
@@ -122,9 +125,30 @@ export default function Security() {
               </div>
               <div className="flex items-center justify-between sm:justify-end gap-6 sm:w-1/3">
                 <span className="text-xs text-slate-500 font-medium">{s.loc}</span>
-                <button className="text-slate-400 hover:text-slate-900 rounded p-1 transition-colors">
-                  <MoreVertical className="w-5 h-5" />
-                </button>
+                <div className="relative">
+                  <button 
+                    onClick={() => setOpenDropdown(openDropdown === i ? null : i)}
+                    className="text-slate-400 hover:text-slate-900 rounded p-1 transition-colors"
+                  >
+                    <MoreVertical className="w-5 h-5" />
+                  </button>
+                  {openDropdown === i && (
+                    <div className="absolute right-0 top-full mt-1 w-40 bg-white border border-slate-200 shadow-lg rounded-lg overflow-hidden py-1 z-10 transition-all">
+                      <button 
+                        onClick={() => setOpenDropdown(null)}
+                        className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2"
+                      >
+                        <Edit2 className="w-4 h-4" /> Rename Session
+                      </button>
+                      <button 
+                        onClick={() => setOpenDropdown(null)}
+                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+                      >
+                        <Trash2 className="w-4 h-4" /> Sign Out
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           ))}

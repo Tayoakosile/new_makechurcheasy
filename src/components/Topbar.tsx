@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Bell, Search, HelpCircle, ChevronDown, Menu, User, Settings, Shield, LogOut } from "lucide-react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 
-export function Topbar() {
+export function Topbar({ onMenuClick }: { onMenuClick?: () => void }) {
   const location = useLocation();
   const navigate = useNavigate();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -35,6 +35,10 @@ export function Topbar() {
       return "Deactivate Account";
     }
     
+    if (location.pathname === '/credits/history') {
+      return "Credits History";
+    }
+    
     switch (location.pathname) {
       case "/": return "Overview";
       case "/settings": return "Profile Settings";
@@ -50,7 +54,10 @@ export function Topbar() {
   return (
     <header className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md border-b border-slate-200 flex justify-between items-center px-4 md:px-8 py-3">
       <div className="flex items-center gap-4">
-        <button className="md:hidden p-2 text-slate-500 hover:bg-slate-100 rounded-lg">
+        <button 
+          onClick={onMenuClick}
+          className="md:hidden p-2 text-slate-500 hover:bg-slate-100 rounded-lg transition-colors"
+        >
           <Menu className="w-5 h-5" />
         </button>
         <h1 className="text-xl font-bold text-slate-900 hidden md:block">{getPageTitle()}</h1>
