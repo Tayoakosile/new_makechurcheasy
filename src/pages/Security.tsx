@@ -5,6 +5,32 @@ import { Link } from "react-router-dom";
 export default function Security() {
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
 
+  const [sessions, setSessions] = useState([
+    { id: 1, dev: "Desktop Church PC", os: "Windows 11 • Chrome", loc: "Lagos, Nigeria", type: "desktop", current: true },
+    { id: 2, dev: "Pastor Laptop", os: "macOS 14.6 • Safari", loc: "Lagos, Nigeria", type: "laptop", current: false },
+    { id: 3, dev: "Home Mac", os: "macOS 14.4 • Chrome", loc: "Abuja, Nigeria", type: "laptop", current: false }
+  ]);
+
+  const [editingSessionId, setEditingSessionId] = useState<number | null>(null);
+  const [editSessionValue, setEditSessionValue] = useState("");
+  const [disconnectId, setDisconnectId] = useState<number | null>(null);
+
+  const saveSessionRename = (id: number) => {
+    if (editSessionValue.trim()) {
+      setSessions(sessions.map(s => s.id === id ? { ...s, dev: editSessionValue.trim() } : s));
+    }
+    setEditingSessionId(null);
+  };
+
+  const executeSessionDisconnect = (id: number) => {
+    setOpenDropdown(null);
+    setDisconnectId(id);
+    setTimeout(() => {
+      setSessions(sessions.filter(s => s.id !== id));
+      setDisconnectId(null);
+    }, 1500);
+  };
+
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto w-full flex flex-col gap-6">
       
@@ -104,54 +130,78 @@ export default function Security() {
           </Link>
         </div>
 
-        <div className="flex flex-col divide-y divide-slate-100">
-          {[
-            { dev: "Desktop Church PC", os: "Windows 11 • Chrome", loc: "Lagos, Nigeria", type: "desktop", current: true },
-            { dev: "Pastor Laptop", os: "macOS 14.6 • Safari", loc: "Lagos, Nigeria", type: "laptop", current: false },
-            { dev: "Home Mac", os: "macOS 14.4 • Chrome", loc: "Abuja, Nigeria", type: "laptop", current: false }
-          ].map((s, i) => (
-            <div key={i} className="py-4 flex flex-col sm:flex-row sm:items-center gap-4 justify-between group">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-lg bg-slate-100 flex items-center justify-center shrink-0 text-slate-500">
-                  <Desktop className="w-6 h-6" />
+        <div className="flex flex-col divide-y divide-slate-100 min-h-[150px]">
+          {sessions.length === 0 ? (
+             <div className="py-8 text-center text-slate-500">No other active sessions.</div>
+          ) : (
+            sessions.map((s) => (
+              <div key={s.id} className="py-4 flex flex-col sm:flex-row sm:items-center gap-4 justify-between group relative">
+                
+                {/* Loader Overlay for Disconnect */}
+                {disconnectId === s.id && (
+                  <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex items-center justify-center">
+                    <span className="text-sm font-bold text-red-600 animate-pulse flex items-center gap-2">
+                       <Trash2 className="w-4 h-4" /> Signing out...
+                    </span>
+                  </div>
+                )}
+
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-lg bg-slate-100 flex items-center justify-center shrink-0 text-slate-500">
+                    <Desktop className="w-6 h-6" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-bold text-slate-900 flex items-center gap-2 mb-1">
+                      {editingSessionId === s.id ? (
+                        <div className="flex items-center gap-1">
+                          <input 
+                            type="text" 
+                            value={editSessionValue} 
+                            onChange={(e) => setEditSessionValue(e.target.value)} 
+                            className="px-2 py-1 border border-blue-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-bold w-40"
+                            autoFocus
+                            onKeyDown={(e) => { if (e.key === 'Enter') saveSessionRename(s.id); }}
+                          />
+                          <button onClick={() => saveSessionRename(s.id)} className="p-1 text-green-600 hover:bg-green-50 rounded"><CheckCircle className="w-4 h-4" /></button>
+                        </div>
+                      ) : (
+                        s.dev
+                      )}
+                      {!editingSessionId && s.current && <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded text-[10px] font-black uppercase tracking-wider">Current</span>}
+                    </span>
+                    {editingSessionId !== s.id && <span className="text-xs text-slate-500 mt-0.5">{s.os}</span>}
+                  </div>
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    {s.dev}
-                    {s.current && <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded text-[10px] font-black uppercase tracking-wider">Current</span>}
-                  </span>
-                  <span className="text-xs text-slate-500 mt-0.5">{s.os}</span>
+                <div className="flex items-center justify-between sm:justify-end gap-6 sm:w-1/3">
+                  <span className="text-xs text-slate-500 font-medium">{s.loc}</span>
+                  <div className="relative">
+                    <button 
+                      onClick={() => setOpenDropdown(openDropdown === s.id ? null : s.id)}
+                      className="text-slate-400 hover:text-slate-900 rounded p-1 transition-colors"
+                    >
+                      <MoreVertical className="w-5 h-5" />
+                    </button>
+                    {openDropdown === s.id && (
+                      <div className="absolute right-0 top-full mt-1 w-40 bg-white border border-slate-200 shadow-lg rounded-lg overflow-hidden py-1 z-20 transition-all">
+                        <button 
+                          onClick={() => { setEditingSessionId(s.id); setEditSessionValue(s.dev); setOpenDropdown(null); }}
+                          className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2"
+                        >
+                          <Edit2 className="w-4 h-4" /> Rename Session
+                        </button>
+                        <button 
+                          onClick={() => executeSessionDisconnect(s.id)}
+                          className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+                        >
+                          <Trash2 className="w-4 h-4" /> Sign Out
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-              <div className="flex items-center justify-between sm:justify-end gap-6 sm:w-1/3">
-                <span className="text-xs text-slate-500 font-medium">{s.loc}</span>
-                <div className="relative">
-                  <button 
-                    onClick={() => setOpenDropdown(openDropdown === i ? null : i)}
-                    className="text-slate-400 hover:text-slate-900 rounded p-1 transition-colors"
-                  >
-                    <MoreVertical className="w-5 h-5" />
-                  </button>
-                  {openDropdown === i && (
-                    <div className="absolute right-0 top-full mt-1 w-40 bg-white border border-slate-200 shadow-lg rounded-lg overflow-hidden py-1 z-10 transition-all">
-                      <button 
-                        onClick={() => setOpenDropdown(null)}
-                        className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 flex items-center gap-2"
-                      >
-                        <Edit2 className="w-4 h-4" /> Rename Session
-                      </button>
-                      <button 
-                        onClick={() => setOpenDropdown(null)}
-                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
-                      >
-                        <Trash2 className="w-4 h-4" /> Sign Out
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
 

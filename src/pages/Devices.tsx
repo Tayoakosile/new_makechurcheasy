@@ -1,8 +1,54 @@
-import { Monitor, Phone, Zap, ArrowRight, Laptop, Edit2, Trash2, MoreVertical, ShieldCheck, Info } from "lucide-react";
+import { useState } from "react";
+import { Monitor, Zap, ArrowRight, Laptop, Edit2, Trash2, MoreVertical, ShieldCheck, Info, CheckCircle2, X } from "lucide-react";
 
 export default function Devices() {
+  const [devices, setDevices] = useState([
+    { id: 1, name: "Desktop Church PC", os: "Windows 11 • EASYBIBLE-001", app: "EasyBible Mount 5.0.0", icon: Monitor, status: "online", active: "2 mins ago", isThis: true },
+    { id: 2, name: "Pastor Laptop", os: "MacBook Pro (M2) • PASTOR-MBP", app: "EasyBible Mount 5.0.0", icon: Laptop, status: "online", active: "4 hours ago", isThis: false },
+    { id: 3, name: "Media Computer", os: "Windows 10 • STUDIO-02", app: "EasyBible Mount 4.9.2", icon: Monitor, status: "offline", active: "2 days ago", isThis: false },
+    { id: 4, name: "Home Mac", os: "MacBook Air (M1) • HOME-MAC", app: "EasyBible Mount 4.9.0", icon: Laptop, status: "offline", active: "1 week ago", isThis: false },
+  ]);
+
+  const [openDropdown, setOpenDropdown] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editValue, setEditValue] = useState("");
+  
+  const [disconnectId, setDisconnectId] = useState<number | null>(null);
+  const [isDisconnecting, setIsDisconnecting] = useState(false);
+
+  const startRename = (id: number, currentName: string) => {
+    setEditingId(id);
+    setEditValue(currentName);
+    setOpenDropdown(null);
+  };
+
+  const saveRename = (id: number) => {
+    if (editValue.trim()) {
+      setDevices(devices.map(d => d.id === id ? { ...d, name: editValue.trim() } : d));
+    }
+    setEditingId(null);
+  };
+
+  const cancelRename = () => {
+    setEditingId(null);
+  };
+
+  const confirmDisconnect = (id: number) => {
+    setDisconnectId(id);
+    setOpenDropdown(null);
+  };
+
+  const executeDisconnect = () => {
+    setIsDisconnecting(true);
+    setTimeout(() => {
+      setDevices(devices.filter(d => d.id !== disconnectId));
+      setIsDisconnecting(false);
+      setDisconnectId(null);
+    }, 1500);
+  };
+
   return (
-    <div className="p-4 md:p-8 max-w-7xl mx-auto w-full space-y-8">
+    <div className="p-4 md:p-8 max-w-7xl mx-auto w-full space-y-8 pb-16">
       <div>
         <h1 className="text-2xl font-bold text-slate-900">Devices</h1>
         <p className="text-slate-500 mt-1 text-sm">Manage devices connected to your EasyBible Mount account.</p>
@@ -11,9 +57,9 @@ export default function Devices() {
       {/* Summary Stats */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { icon: Monitor, color: "text-blue-600 bg-blue-50", count: "4", title: "Total Devices", sub: "Devices connected" },
-          { icon: null, dot: "bg-green-500", color: "bg-green-50", count: "2", title: "Online", sub: "Currently active" },
-          { icon: null, dot: "bg-slate-400", color: "bg-slate-100", count: "2", title: "Offline", sub: "Not connected" },
+          { icon: Monitor, color: "text-blue-600 bg-blue-50", count: devices.length.toString(), title: "Total Devices", sub: "Devices connected" },
+          { icon: null, dot: "bg-green-500", color: "bg-green-50", count: devices.filter(d => d.status === 'online').length.toString(), title: "Online", sub: "Currently active" },
+          { icon: null, dot: "bg-slate-400", color: "bg-slate-100", count: devices.filter(d => d.status === 'offline').length.toString(), title: "Offline", sub: "Not connected" },
           { icon: Zap, color: "text-purple-600 bg-purple-50", count: "8", title: "This Month", sub: "Active sessions" }
         ].map((stat, i) => (
           <div key={i} className="bg-white p-6 rounded-xl border border-slate-200 flex flex-col shadow-sm">
@@ -28,7 +74,7 @@ export default function Devices() {
       </section>
 
       {/* Device List */}
-      <section className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+      <section className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm relative">
         <div className="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50/50">
           <h2 className="text-lg font-semibold text-slate-900">Your Devices</h2>
           <button className="flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-900 border border-slate-200 bg-white px-3 py-1.5 rounded-lg shadow-sm">
@@ -36,56 +82,116 @@ export default function Devices() {
           </button>
         </div>
         
-        <div className="divide-y divide-slate-100">
-          {[
-            { name: "Desktop Church PC", os: "Windows 11 • EASYBIBLE-001", app: "EasyBible Mount 5.0.0", icon: Monitor, status: "online", active: "2 mins ago", isThis: true },
-            { name: "Pastor Laptop", os: "MacBook Pro (M2) • PASTOR-MBP", app: "EasyBible Mount 5.0.0", icon: Laptop, status: "online", active: "4 hours ago", isThis: false },
-            { name: "Media Computer", os: "Windows 10 • STUDIO-02", app: "EasyBible Mount 4.9.2", icon: Monitor, status: "offline", active: "2 days ago", isThis: false },
-            { name: "Home Mac", os: "MacBook Air (M1) • HOME-MAC", app: "EasyBible Mount 4.9.0", icon: Laptop, status: "offline", active: "1 week ago", isThis: false },
-          ].map((dev, i) => (
-            <div key={i} className={`p-5 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-slate-50 transition-colors ${dev.status === 'offline' ? 'opacity-75' : ''}`}>
-              <div className="flex items-start gap-4">
-                <div className="flex justify-center w-6 pt-1.5">
-                  <div className={`w-2.5 h-2.5 rounded-full ${dev.status === 'online' ? 'bg-green-500' : 'bg-slate-300'}`}></div>
-                </div>
-                <div className="w-12 h-12 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600 shrink-0">
-                  <dev.icon className="w-6 h-6" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-bold text-slate-900">{dev.name}</h3>
-                    {dev.isThis && <span className="text-[10px] font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full uppercase tracking-wider">This Device</span>}
+        <div className="divide-y divide-slate-100 min-h-[200px]">
+          {devices.length === 0 ? (
+             <div className="p-8 text-center text-slate-500">No active devices found.</div>
+          ) : (
+            devices.map((dev) => (
+              <div key={dev.id} className={`p-5 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-slate-50 transition-colors ${dev.status === 'offline' ? 'opacity-75' : ''}`}>
+                <div className="flex items-start gap-4 flex-1">
+                  <div className="flex justify-center w-6 pt-1.5">
+                    <div className={`w-2.5 h-2.5 rounded-full ${dev.status === 'online' ? 'bg-green-500' : 'bg-slate-300'}`}></div>
                   </div>
-                  <p className="text-sm text-slate-500 mt-1">{dev.os}</p>
-                  <p className="text-xs text-slate-400 mt-0.5">{dev.app}</p>
+                  <div className="w-12 h-12 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600 shrink-0">
+                    <dev.icon className="w-6 h-6" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      {editingId === dev.id ? (
+                        <div className="flex items-center gap-2 w-full max-w-xs">
+                          <input 
+                            type="text" 
+                            value={editValue} 
+                            onChange={(e) => setEditValue(e.target.value)} 
+                            className="px-2 py-1 border border-blue-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 w-full text-sm font-bold text-slate-900"
+                            autoFocus
+                            onKeyDown={(e) => { if (e.key === 'Enter') saveRename(dev.id); else if(e.key === 'Escape') cancelRename(); }}
+                          />
+                          <button onClick={() => saveRename(dev.id)} className="p-1 text-green-600 hover:bg-green-50 rounded"><CheckCircle2 className="w-4 h-4" /></button>
+                          <button onClick={cancelRename} className="p-1 text-slate-400 hover:bg-slate-100 rounded"><X className="w-4 h-4" /></button>
+                        </div>
+                      ) : (
+                        <h3 className="font-bold text-slate-900">{dev.name}</h3>
+                      )}
+                      {!editingId && dev.isThis && <span className="text-[10px] font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full uppercase tracking-wider">This Device</span>}
+                    </div>
+                    {(editingId !== dev.id) && (
+                      <>
+                        <p className="text-sm text-slate-500 mt-1">{dev.os}</p>
+                        <p className="text-xs text-slate-400 mt-0.5">{dev.app}</p>
+                      </>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-6 md:ml-auto pl-10 md:pl-0 shrink-0">
+                  <div className="text-right hidden sm:block w-24 shrink-0">
+                    <p className="text-xs text-slate-500">Last active</p>
+                    <p className="text-sm font-semibold text-slate-900 truncate">{dev.active}</p>
+                  </div>
+                  <div className="relative">
+                    <button 
+                      onClick={() => setOpenDropdown(openDropdown === dev.id ? null : dev.id)}
+                      className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded transition-colors"
+                    >
+                      <MoreVertical className="w-5 h-5" />
+                    </button>
+
+                    {openDropdown === dev.id && (
+                      <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-slate-200 shadow-xl rounded-xl overflow-hidden py-1 z-20">
+                        <button 
+                          onClick={() => startRename(dev.id, dev.name)}
+                          className="w-full text-left px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 flex items-center gap-2"
+                        >
+                          <Edit2 className="w-4 h-4 text-slate-400" /> Rename Device
+                        </button>
+                        <button 
+                          onClick={() => confirmDisconnect(dev.id)}
+                          className="w-full text-left px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 flex items-center gap-2"
+                        >
+                          <Trash2 className="w-4 h-4" /> Disconnect
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-              
-              <div className="flex items-center gap-6 md:ml-auto pl-10 md:pl-0">
-                <div className="text-right hidden sm:block w-24 shrink-0">
-                  <p className="text-xs text-slate-500">Last active</p>
-                  <p className="text-sm font-semibold text-slate-900 truncate">{dev.active}</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button className="flex items-center gap-1.5 px-3 py-1.5 border border-slate-200 rounded-md text-sm font-medium text-slate-600 hover:bg-slate-100 bg-white transition-colors shadow-sm">
-                    <Edit2 className="w-3.5 h-3.5 text-slate-400" /> <span className="hidden sm:inline">Rename</span>
-                  </button>
-                  <button className="flex items-center gap-1.5 px-3 py-1.5 border border-red-200 rounded-md text-sm font-medium text-red-600 hover:bg-red-50 bg-white transition-colors shadow-sm">
-                    <Trash2 className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Disconnect</span>
-                  </button>
-                  <button className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded">
-                    <MoreVertical className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
         <div className="p-4 border-t border-slate-100 text-center bg-slate-50">
-          <a href="#" className="text-sm font-semibold text-blue-600 hover:text-blue-800 inline-flex items-center gap-1.5">
+          <button className="text-sm font-semibold text-blue-600 hover:text-blue-800 inline-flex items-center gap-1.5">
             View all devices activity <ArrowRight className="w-4 h-4" />
-          </a>
+          </button>
         </div>
+
+        {/* Disconnect Confirmation Modal Overlay */}
+        {disconnectId !== null && (
+          <div className="absolute inset-0 bg-slate-900/20 backdrop-blur-sm flex items-center justify-center p-4 z-30 border-t border-b border-transparent rounded-xl">
+             <div className="bg-white p-6 rounded-xl shadow-xl border border-slate-200 max-w-sm w-full">
+               <h3 className="text-lg font-bold text-slate-900 mb-2">Disconnect Device?</h3>
+               <p className="text-sm text-slate-500 mb-6">
+                 This device will be signed out immediately and will require a new pairing code or password to reconnect.
+               </p>
+               <div className="flex gap-3 justify-end">
+                 <button 
+                   onClick={() => setDisconnectId(null)}
+                   disabled={isDisconnecting}
+                   className="px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-lg transition-colors disabled:opacity-50"
+                 >
+                   Cancel
+                 </button>
+                 <button 
+                   onClick={executeDisconnect}
+                   disabled={isDisconnecting}
+                   className="px-4 py-2 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-lg shadow-sm transition-colors disabled:opacity-75 flex items-center gap-2"
+                 >
+                   {isDisconnecting ? 'Disconnecting...' : 'Disconnect'}
+                 </button>
+               </div>
+             </div>
+          </div>
+        )}
       </section>
 
       {/* Connection Area */}
@@ -149,3 +255,4 @@ export default function Devices() {
     </div>
   );
 }
+

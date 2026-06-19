@@ -1,4 +1,5 @@
-import { Zap, Wallet, ChevronDown, CheckCircle, ArrowRight } from "lucide-react";
+import { useState } from "react";
+import { Zap, Wallet, ChevronDown, CheckCircle, ArrowRight, AlertCircle, CheckCircle2, CreditCard } from "lucide-react";
 import { Link } from "react-router-dom";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
@@ -13,6 +14,9 @@ const dummyData = [
 ];
 
 export default function Credits() {
+  const [showPurchaseStatus, setShowPurchaseStatus] = useState<'success' | 'failed' | null>(null);
+  const [showPurchaseDropdown, setShowPurchaseDropdown] = useState(false);
+
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto w-full flex-1 flex flex-col gap-6 pb-16">
       <div>
@@ -65,13 +69,34 @@ export default function Credits() {
             </div>
             <p className="text-sm text-slate-400 mt-4 leading-relaxed max-w-sm">Auto-renews on <strong className="text-white">Jul 18, 2026</strong>. Additional usage is charged at $0.05 per 10 credits.</p>
           </div>
-          <div className="flex gap-3">
-             <button className="bg-blue-600 text-white hover:bg-blue-500 font-bold text-sm px-6 py-3 rounded-lg transition-colors shadow-sm w-full sm:w-auto">
-               Buy More Credits
-             </button>
-             <button className="bg-slate-700 text-slate-200 hover:bg-slate-600 font-bold text-sm px-6 py-3 rounded-lg transition-colors border border-slate-600 w-full sm:w-auto">
-               Manage Billing
-             </button>
+          <div className="flex gap-3 relative">
+            <div className="relative">
+               <button 
+                 onClick={() => setShowPurchaseDropdown(!showPurchaseDropdown)}
+                 className="bg-blue-600 text-white hover:bg-blue-500 font-bold text-sm px-6 py-3 rounded-lg transition-colors shadow-sm w-full sm:w-auto"
+               >
+                 Buy More Credits
+               </button>
+               {showPurchaseDropdown && (
+                 <div className="absolute top-full mt-2 left-0 w-48 bg-white rounded-lg shadow-xl border border-slate-200 overflow-hidden z-20">
+                   <button 
+                     onClick={() => { setShowPurchaseStatus('success'); setShowPurchaseDropdown(false); }} 
+                     className="w-full text-left px-4 py-3 text-sm text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 font-bold border-b border-slate-100 transition-colors"
+                   >
+                     Test Purchase Success
+                   </button>
+                   <button 
+                     onClick={() => { setShowPurchaseStatus('failed'); setShowPurchaseDropdown(false); }} 
+                     className="w-full text-left px-4 py-3 text-sm text-slate-700 hover:bg-red-50 hover:text-red-700 font-bold transition-colors"
+                   >
+                     Test Purchase Failed
+                   </button>
+                 </div>
+               )}
+            </div>
+            <button className="bg-slate-700 text-slate-200 hover:bg-slate-600 font-bold text-sm px-6 py-3 rounded-lg transition-colors border border-slate-600 w-full sm:w-auto">
+              Manage Billing
+            </button>
           </div>
         </div>
       </div>
@@ -148,20 +173,103 @@ export default function Credits() {
                 { date: "June 08, 2026", desc: "Monthly Auto-Renewal", amt: "+2000", bal: "967", pos: true },
               ].map((row, i) => (
                 <tr key={i} className="hover:bg-slate-50/50 transition-colors">
-                  <td className="py-4 px-6 text-slate-500 font-medium whitespace-nowrap">{row.date}</td>
-                  <td className="py-4 px-6 font-medium text-slate-700">{row.desc}</td>
-                  <td className={`py-4 px-6 text-right font-bold whitespace-nowrap ${row.pos ? 'text-green-600 bg-green-50/30' : 'text-slate-900'}`}>
-                    <span className={row.pos ? 'px-2 py-1 rounded bg-green-100/50 inline-block' : ''}>
-                      {row.amt}
-                    </span>
-                  </td>
-                  <td className="py-4 px-6 text-right font-bold text-slate-500">{row.bal}</td>
-                </tr>
+                   <td className="py-4 px-6 text-slate-500 font-medium whitespace-nowrap">{row.date}</td>
+                   <td className="py-4 px-6 font-medium text-slate-700">{row.desc}</td>
+                   <td className={`py-4 px-6 text-right font-bold whitespace-nowrap ${row.pos ? 'text-green-600 bg-green-50/30' : 'text-slate-900'}`}>
+                     <span className={row.pos ? 'px-2 py-1 rounded bg-green-100/50 inline-block' : ''}>
+                       {row.amt}
+                     </span>
+                   </td>
+                   <td className="py-4 px-6 text-right font-bold text-slate-500">{row.bal}</td>
+                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       </div>
+
+      {/* Success Modal */}
+      {showPurchaseStatus === 'success' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setShowPurchaseStatus(null)}></div>
+          <div className="relative w-full max-w-md bg-white/90 backdrop-blur-xl rounded-2xl border border-slate-200/60 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="p-8 flex flex-col items-center text-center">
+              <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center mb-6 shadow-[0_0_40px_rgba(16,185,129,0.2)]">
+                <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+              </div>
+              <h2 className="text-2xl font-bold text-slate-900 mb-2">Purchase Successful!</h2>
+              <p className="text-sm font-medium text-slate-500 mb-8 px-4 leading-relaxed">
+                Great news! 500 credits have been successfully added to your church's account balance.
+              </p>
+              
+              <div className="w-full bg-slate-50 rounded-xl border border-slate-100 p-5 mb-8 text-left space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-slate-500">Package</span>
+                  <span className="text-sm font-bold text-slate-900">500 Credits</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-slate-500">Amount</span>
+                  <span className="text-sm font-bold text-slate-900">$45.00</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-slate-500">Payment Method</span>
+                  <div className="flex items-center gap-2">
+                    <CreditCard className="w-4 h-4 text-slate-400" />
+                    <span className="text-sm font-bold text-slate-900">Visa ending in 4242</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="w-full flex flex-col gap-3">
+                <button onClick={() => setShowPurchaseStatus(null)} className="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-lg text-white font-bold text-sm transition-all shadow-sm">
+                  Back to Credits
+                </button>
+                <Link to="/billing/invoices/1" onClick={() => setShowPurchaseStatus(null)} className="w-full bg-white hover:bg-slate-50 border border-slate-200 py-3 rounded-lg text-slate-700 font-bold text-sm transition-all">
+                  View Invoice
+                </Link>
+              </div>
+            </div>
+            <div className="h-1.5 w-full bg-gradient-to-r from-emerald-400 via-blue-500 to-emerald-400"></div>
+          </div>
+        </div>
+      )}
+
+      {/* Failed Modal */}
+      {showPurchaseStatus === 'failed' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={() => setShowPurchaseStatus(null)}></div>
+          <div className="relative w-full max-w-[480px] bg-white rounded-xl border border-slate-200 shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
+            <div className="p-8 flex flex-col items-center text-center">
+              <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mb-6">
+                <AlertCircle className="w-8 h-8 text-red-600" />
+              </div>
+              <h2 className="text-xl font-bold text-slate-900 mb-2">Purchase Failed</h2>
+              <div className="px-6 relative">
+                <p className="text-sm font-medium text-slate-500 leading-relaxed">
+                  Your payment method was declined. Please check your details and try again.
+                </p>
+              </div>
+            </div>
+            
+            <div className="mx-8 mb-8 p-3 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-3">
+              <div className="px-2 py-0.5 bg-slate-200 rounded font-mono text-xs font-bold text-slate-600">ERR</div>
+              <span className="font-mono text-xs font-bold text-slate-600 tracking-wider">PAYMENT_DECLINED</span>
+            </div>
+            
+            <div className="p-6 bg-slate-50/80 flex flex-col gap-3 border-t border-slate-100">
+              <button onClick={() => setShowPurchaseStatus(null)} className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold text-sm shadow-sm transition-colors hover:bg-blue-700">
+                Try Again
+              </button>
+              <button onClick={() => setShowPurchaseStatus(null)} className="w-full bg-white border border-slate-200 text-slate-700 py-3 rounded-lg font-bold text-sm hover:bg-slate-50 transition-colors">
+                Update Payment Method
+              </button>
+              <button onClick={() => setShowPurchaseStatus(null)} className="w-full py-2 text-slate-500 font-bold text-sm hover:text-slate-900 transition-colors">
+                Cancel and close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       
     </div>
   );

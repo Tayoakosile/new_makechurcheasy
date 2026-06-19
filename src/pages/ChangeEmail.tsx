@@ -1,3 +1,4 @@
+import React from "react";
 import { Mail, CheckCircle2, Lock, Eye, Send, ShieldAlert } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 

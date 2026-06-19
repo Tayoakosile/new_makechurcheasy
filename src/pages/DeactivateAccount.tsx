@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AlertOctagon, CheckCircle2, ChevronRight, X, AlertTriangle, Shield, Download, Lock } from "lucide-react";
 import { cn } from "../lib/utils";

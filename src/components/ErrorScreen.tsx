@@ -1,3 +1,4 @@
+import React from "react";
 import { HelpCircle, Home } from "lucide-react";
 import { Link } from "react-router-dom";
 

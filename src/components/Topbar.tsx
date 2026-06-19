@@ -38,6 +38,12 @@ export function Topbar({ onMenuClick }: { onMenuClick?: () => void }) {
     if (location.pathname === '/credits/history') {
       return "Credits History";
     }
+    if (location.pathname === '/subscription/plans') {
+      return "Change Plan";
+    }
+    if (location.pathname.startsWith('/billing/invoices')) {
+      return "Invoice Details";
+    }
     
     switch (location.pathname) {
       case "/": return "Overview";
@@ -47,6 +53,8 @@ export function Topbar({ onMenuClick }: { onMenuClick?: () => void }) {
       case "/security": return "Security";
       case "/credits": return "Credits";
       case "/downloads": return "Downloads";
+      case "/subscription": return "Subscription & Usage";
+      case "/billing": return "Billing";
       default: return "Dashboard";
     }
   };

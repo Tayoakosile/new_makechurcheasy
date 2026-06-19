@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronRight, CheckCircle2, Lock, Eye, EyeOff, Info, ArrowRight, ShieldCheck, Mail, AlertTriangle } from "lucide-react";
 import { cn } from "../lib/utils";

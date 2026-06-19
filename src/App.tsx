@@ -14,6 +14,9 @@ import Security from "./pages/Security";
 import Credits from "./pages/Credits";
 import CreditsHistory from "./pages/CreditsHistory";
 import Downloads from "./pages/Downloads";
+import Subscription from "./pages/Subscription";
+import ChangePlan from "./pages/ChangePlan";
+import Invoice from "./pages/Invoice";
 
 export default function App() {
   return (
@@ -34,13 +37,15 @@ export default function App() {
           <Route path="credits" element={<Credits />} />
           <Route path="credits/history" element={<CreditsHistory />} />
           <Route path="downloads" element={<Downloads />} />
+          <Route path="subscription" element={<Subscription />} />
+          <Route path="subscription/plans" element={<ChangePlan />} />
+          <Route path="billing/invoices/:id" element={<Invoice />} />
+          <Route path="billing" element={<Invoice />} /> {/* Redirecting for demo */}
           
           {/* Fallback routes for dummy links */}
-          <Route path="subscription" element={<div className="p-8 text-center text-slate-500">Subscription details coming soon...</div>} />
           <Route path="tutorials" element={<div className="p-8 text-center text-slate-500">Tutorials coming soon...</div>} />
           <Route path="community" element={<div className="p-8 text-center text-slate-500">Community details coming soon...</div>} />
           <Route path="support" element={<div className="p-8 text-center text-slate-500">Support center coming soon...</div>} />
-          <Route path="billing" element={<div className="p-8 text-center text-slate-500">Billing details coming soon...</div>} />
           
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
