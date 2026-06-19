@@ -17,6 +17,10 @@ import Downloads from "./pages/Downloads";
 import Subscription from "./pages/Subscription";
 import ChangePlan from "./pages/ChangePlan";
 import Invoice from "./pages/Invoice";
+import Tutorials from "./pages/Tutorials";
+import Community from "./pages/Community";
+
+import Support from "./pages/Support";
 
 export default function App() {
   return (
@@ -42,10 +46,11 @@ export default function App() {
           <Route path="billing/invoices/:id" element={<Invoice />} />
           <Route path="billing" element={<Invoice />} /> {/* Redirecting for demo */}
           
+          <Route path="tutorials" element={<Tutorials />} />
+          <Route path="community" element={<Community />} />
+
           {/* Fallback routes for dummy links */}
-          <Route path="tutorials" element={<div className="p-8 text-center text-slate-500">Tutorials coming soon...</div>} />
-          <Route path="community" element={<div className="p-8 text-center text-slate-500">Community details coming soon...</div>} />
-          <Route path="support" element={<div className="p-8 text-center text-slate-500">Support center coming soon...</div>} />
+          <Route path="support" element={<Support />} />
           
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>

@@ -55,6 +55,9 @@ export function Topbar({ onMenuClick }: { onMenuClick?: () => void }) {
       case "/downloads": return "Downloads";
       case "/subscription": return "Subscription & Usage";
       case "/billing": return "Billing";
+      case "/tutorials": return "Tutorials";
+      case "/community": return "Community";
+      case "/support": return "Support Center";
       default: return "Dashboard";
     }
   };
